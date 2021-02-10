@@ -63,9 +63,9 @@ mod tests {
         values.reverse();
         let initial = values.pop().unwrap()?;
         let mut root = Box::new(TreeNode::new(initial));
-        queue.push_front(&mut root);
+        queue.push_back(&mut root);
         for _ in 1..height {
-            while let Some(node) = queue.pop_back() {
+            while let Some(node) = queue.pop_front() {
                 construct_subtree(&mut values, &mut node.left, &mut queue);
                 construct_subtree(&mut values, &mut node.right, &mut queue);
             }
@@ -82,7 +82,7 @@ mod tests {
         if let Some(Some(value)) = values.pop() {
             let node = Box::new(TreeNode::new(value));
             *subtree_ref = Some(node);
-            queue.push_front(subtree_ref.as_mut().unwrap());
+            queue.push_back(subtree_ref.as_mut().unwrap());
         }
     }
 

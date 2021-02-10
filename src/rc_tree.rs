@@ -76,9 +76,9 @@ mod tests {
         values.reverse();
         let initial = values.pop().unwrap()?;
         let root = Rc::new(RefCell::new(TreeNode::new(initial)));
-        queue.push_front(root.clone());
+        queue.push_back(root.clone());
         for _ in 1..height {
-            while let Some(node) = queue.pop_back() {
+            while let Some(node) = queue.pop_front() {
                 let mut node_ref = node.borrow_mut();
                 construct_subtree(&mut values, &mut node_ref.left, &mut queue);
                 construct_subtree(&mut values, &mut node_ref.right, &mut queue);
@@ -97,7 +97,7 @@ mod tests {
             let node = Rc::new(RefCell::new(TreeNode::new(value)));
             let node_ref = node.clone();
             *subtree_ref = Some(node);
-            queue.push_front(node_ref);
+            queue.push_back(node_ref);
         }
     }
 
@@ -113,9 +113,11 @@ mod tests {
             Some(13),
         ]);
         let answer = Solution::trim_bst(root, 8, 12);
+        let expected = build_tree(vec![Some(10), Some(8), Some(11), None, Some(9), None, None]);
         assert_eq!(
-            answer,
-            build_tree(vec![Some(10), Some(8), Some(11), None, Some(9), None, None])
+            answer, expected,
+            "\nexpected tree \n{:#?}\n got \n{:#?}",
+            expected, answer
         );
     }
 
@@ -137,6 +139,11 @@ mod tests {
             Some(18),
         ]);
         let answer = Solution::trim_bst(root, 4, 8);
-        assert_eq!(answer, build_tree(vec![Some(5), None, Some(6)]));
+        let expected = build_tree(vec![Some(5), None, Some(6)]);
+        assert_eq!(
+            answer, expected,
+            "expected tree \n{:#?}\n got \n{:#?}",
+            expected, answer
+        );
     }
 }
