@@ -113,7 +113,7 @@ mod tests {
             Some(13),
         ]);
         let answer = Solution::trim_bst(root, 8, 12);
-        let expected = build_tree(vec![Some(10), Some(8), Some(11), None, Some(9), None, None]);
+        let expected = build_tree(vec![Some(10), Some(8), Some(11), None, Some(9)]);
         assert_eq!(
             answer, expected,
             "\nexpected tree \n{:#?}\n got \n{:#?}",
