@@ -69,7 +69,7 @@ mod tests {
         let mut queue = VecDeque::new();
         let length = values.len();
         let height = if length > 1 {
-            (length as f32).log2().floor() as usize + 1
+            (length as f32).log2().ceil() as usize
         } else {
             1
         };
