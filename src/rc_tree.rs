@@ -62,7 +62,7 @@ mod tests {
     use std::{cell::RefCell, collections::VecDeque, rc::Rc};
 
     /// Build a tree from a vec specifying nodes in level order.
-    fn build_tree(mut values: Vec<Option<i32>>) -> Option<Rc<RefCell<TreeNode>>> {
+    pub fn build_tree(mut values: Vec<Option<i32>>) -> Option<Rc<RefCell<TreeNode>>> {
         if values.is_empty() {
             return None;
         }
@@ -77,8 +77,8 @@ mod tests {
         let initial = values.pop().unwrap()?;
         let root = Rc::new(RefCell::new(TreeNode::new(initial)));
         queue.push_front(root.clone());
-        for _ in 1..=height {
-            if let Some(node) = queue.pop_back() {
+        for _ in 1..height {
+            while let Some(node) = queue.pop_back() {
                 let mut node_ref = node.borrow_mut();
                 construct_subtree(&mut values, &mut node_ref.left, &mut queue);
                 construct_subtree(&mut values, &mut node_ref.right, &mut queue);
@@ -87,7 +87,7 @@ mod tests {
         Some(root)
     }
 
-    /// Build the root of a new subtree
+    /// Build the root of a new subtree.
     fn construct_subtree(
         values: &mut Vec<Option<i32>>,
         subtree_ref: &mut Option<Rc<RefCell<TreeNode>>>,
@@ -117,5 +117,26 @@ mod tests {
             answer,
             build_tree(vec![Some(10), Some(8), Some(11), None, Some(9), None, None])
         );
+    }
+
+    #[test]
+    fn example2() {
+        let root = build_tree(vec![
+            Some(10),
+            Some(5),
+            Some(15),
+            Some(3),
+            Some(6),
+            None,
+            Some(17),
+            Some(2),
+            None,
+            None,
+            None,
+            Some(16),
+            Some(18),
+        ]);
+        let answer = Solution::trim_bst(root, 4, 8);
+        assert_eq!(answer, build_tree(vec![Some(5), None, Some(6)]));
     }
 }
